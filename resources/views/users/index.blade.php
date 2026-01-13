@@ -33,12 +33,16 @@
 
                     <td>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                            <form action="{{ route('users.delete', $user->id) }}" method='POST'>
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
+                            @can('edit', \App\Models\User::class)
+                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Editar</a>
+                            @endcan
+                            @can('destroy', \App\Models\User::class)
+                                <form action="{{ route('users.delete', $user->id) }}" method='POST'>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            @endcan
                         </div>
                     </td>
                 </tr>

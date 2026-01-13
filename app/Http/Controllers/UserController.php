@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -46,13 +47,18 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        Gate::authorize('edit', User::class);
+
         $user->load(['profile', 'interests']);
         $roles = Role::all();
+
         return view('users.edit', compact('user', 'roles'));
     }
 
     public function update(User $user, Request $request)
     {
+        Gate::authorize('update', User::class);
+
         $input = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
@@ -67,6 +73,8 @@ class UserController extends Controller
 
     public function updateProfile(User $user, Request $request)
     {
+        Gate::authorize('updateProfile', User::class);
+
         $input = $request->validate([
             'type' => 'required',
             'address' => 'nullable',
@@ -79,6 +87,8 @@ class UserController extends Controller
 
     public function updateInterests(User $user, Request $request)
     {
+        Gate::authorize('updateInterests', User::class);
+
         $input = $request->validate([
             'interests' => 'nullable|array',
         ]);
@@ -95,6 +105,7 @@ class UserController extends Controller
 
     public function updateRoles(User $user, Request $request)
     {
+        Gate::authorize('updateRoles', User::class);
 
         $input = $request->validate([
             'roles' => 'required|array',
@@ -107,6 +118,8 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
+        Gate::authorize('delete', User::class);
+
         $user->delete();
 
         return back()->with('status', 'Usuário deletado com sucesso!');
