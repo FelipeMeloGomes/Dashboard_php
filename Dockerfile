@@ -1,68 +1,33 @@
-# =========================
-# Stage 1 — Build frontend
-# =========================
-FROM node:20-alpine AS frontend
+# Imagem base PHP com FPM
+FROM php:8.1-fpm-alpine
 
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY resources ./resources
-COPY vite.config.js ./
-RUN npm run build
-
-# =========================
-# Stage 2 — Build backend
-# =========================
-FROM php:8.2-fpm-alpine
-
-# Instala dependências do sistema
+# Instala pacotes necessários e Nginx
 RUN apk add --no-cache \
-  bash \
-  git \
-  curl \
-  libzip-dev \
-  unzip \
-  oniguruma-dev \
-  icu-dev \
-  postgresql-dev \
-  postgresql-client \
   nginx \
-  supervisor \
-  ca-certificates \
-  && update-ca-certificates
+  bash \
+  curl \
+  libpng-dev \
+  libjpeg-turbo-dev \
+  freetype-dev \
+  libzip-dev \
+  zip \
+  oniguruma-dev \
+  && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Extensões PHP necessárias para Laravel
-RUN docker-php-ext-install pdo pdo_pgsql zip intl
-
-# Instala Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
+# Define diretório de trabalho
 WORKDIR /var/www/html
 
-# Copia código do Laravel
+# Copia arquivos do projeto
 COPY . .
 
-# Copia assets buildados do frontend
-COPY --from=frontend /app/public/build ./public/build
+# Ajusta permissões
+RUN chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache
 
-# Instala dependências PHP
-RUN composer install --no-dev --optimize-autoloader
-
-# Permissões corretas
-RUN chown -R www-data:www-data storage bootstrap/cache && \
-  chmod -R 775 storage bootstrap/cache
-
-# Remove comandos que geram warnings no build
-# php artisan key:generate será executado no deploy, usando variáveis de ambiente
-
-# Configura Nginx
+# Copia configuração do Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Exponha porta do Render
+# Expõe porta que o Render exige
 EXPOSE 8080
 
-# Start PHP-FPM e Nginx via Supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Comando para iniciar PHP-FPM + Nginx juntos
+CMD sh -c "php-fpm -F & nginx -g 'daemon off;'"
