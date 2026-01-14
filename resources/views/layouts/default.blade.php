@@ -24,7 +24,7 @@
 
 
     <meta name="supported-color-schemes" content="light dark" />
-    @vite('resources/scss/app.scss')
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 
 
@@ -323,9 +323,6 @@
 
     @include('parts.footer')
     </div>
-
-
-    @vite('resources/js/app.js')
 </body>
 <!--end::Body-->
 

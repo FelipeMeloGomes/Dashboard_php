@@ -27,17 +27,12 @@
     <meta name="supported-color-schemes" content="light dark" />
     <!--end::Accessibility Features-->
 
-    @vite('resources/scss/app.scss')
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 
 
 <body class="@yield('body-class') bg-body-secondary">
     @yield('content')
-
-    <script>
-        @vite('resources/js/app.js')
-    </script>
-
 </body>
 
 </html>
