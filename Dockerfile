@@ -62,5 +62,5 @@ RUN php artisan key:generate || true && \
 # Expose porta do Render
 EXPOSE 8080
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Start PHP
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
