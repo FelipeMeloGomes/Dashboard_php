@@ -31,7 +31,7 @@ RUN apk add --no-cache \
   ca-certificates \
   && update-ca-certificates
 
-# Extensões PHP necessárias para Laravel
+# Extensões PHP necessárias
 RUN docker-php-ext-install pdo pdo_pgsql zip intl
 
 # Instala Composer
@@ -42,25 +42,18 @@ WORKDIR /var/www/html
 # Copia código do Laravel
 COPY . .
 
-# Copia assets buildados do frontend
+# Copia frontend buildado
 COPY --from=frontend /app/public/build ./public/build
 
 # Instala dependências PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissões corretas para Laravel
+# Permissões corretas
 RUN chown -R www-data:www-data storage bootstrap/cache && \
   chmod -R 775 storage bootstrap/cache
-
-# Cache do Laravel
-RUN php artisan key:generate || true && \
-  php artisan config:clear && \
-  php artisan route:clear && \
-  php artisan view:clear && \
-  php artisan optimize
 
 # Expose porta do Render
 EXPOSE 8080
 
-# Start PHP
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+# Start PHP-FPM
+CMD ["php-fpm"]
