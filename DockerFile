@@ -1,0 +1,64 @@
+# =========================
+# Stage 1 — Build frontend
+# =========================
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY resources ./resources
+COPY vite.config.js ./
+RUN npm run build
+
+
+# =========================
+# Stage 2 — Build backend
+# =========================
+FROM php:8.2-fpm-alpine
+
+# Instala dependências do sistema
+RUN apk add --no-cache \
+  bash \
+  git \
+  curl \
+  libzip-dev \
+  unzip \
+  oniguruma-dev \
+  icu-dev \
+  mysql-client
+
+# Extensões PHP necessárias para Laravel
+RUN docker-php-ext-install pdo pdo_mysql zip intl
+
+# Instala Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# Copia código do Laravel
+COPY . .
+
+# Copia assets buildados do frontend
+COPY --from=frontend /app/public/build ./public/build
+
+# Instala dependências PHP
+RUN composer install --no-dev --optimize-autoloader
+
+# Permissões
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+  chmod -R 775 storage bootstrap/cache
+
+# Cache do Laravel
+RUN php artisan key:generate || true && \
+  php artisan config:clear && \
+  php artisan route:clear && \
+  php artisan view:clear && \
+  php artisan optimize
+
+# Porta padrão
+EXPOSE 8000
+
+# Start do Laravel
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
