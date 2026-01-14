@@ -1,4 +1,5 @@
 @use "bootstrap/scss/bootstrap";
-@use "admin-lte/dist/css/adminlte.css";
-@use "overlayscrollbars/styles/overlayscrollbars.css";
-@use "bootstrap-icons/font/bootstrap-icons.css";
+
+@import url("admin-lte/dist/css/adminlte.css");
+@import url("overlayscrollbars/styles/overlayscrollbars.css");
+@import url("bootstrap-icons/font/bootstrap-icons.css");
