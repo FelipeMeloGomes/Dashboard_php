@@ -27,10 +27,11 @@ RUN apk add --no-cache \
   unzip \
   oniguruma-dev \
   icu-dev \
-  mysql-client
+  postgresql-dev \
+  postgresql-client
 
 # Extensões PHP necessárias para Laravel
-RUN docker-php-ext-install pdo pdo_mysql zip intl
+RUN docker-php-ext-install pdo pdo_pgsql zip intl
 
 # Instala Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
