@@ -12,7 +12,6 @@ COPY resources ./resources
 COPY vite.config.js ./
 RUN npm run build
 
-
 # =========================
 # Stage 2 — Build backend
 # =========================
@@ -28,7 +27,9 @@ RUN apk add --no-cache \
   oniguruma-dev \
   icu-dev \
   postgresql-dev \
-  postgresql-client
+  postgresql-client \
+  ca-certificates \
+  && update-ca-certificates
 
 # Extensões PHP necessárias para Laravel
 RUN docker-php-ext-install pdo pdo_pgsql zip intl
@@ -47,7 +48,7 @@ COPY --from=frontend /app/public/build ./public/build
 # Instala dependências PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Permissões
+# Permissões corretas para Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache && \
   chmod -R 775 storage bootstrap/cache
 
@@ -58,8 +59,8 @@ RUN php artisan key:generate || true && \
   php artisan view:clear && \
   php artisan optimize
 
-# Porta padrão
-EXPOSE 8000
+# Expose porta do Render
+EXPOSE 8080
 
-# Start do Laravel
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Start PHP-FPM
+CMD ["php-fpm"]
