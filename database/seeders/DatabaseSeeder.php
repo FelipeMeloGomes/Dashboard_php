@@ -17,17 +17,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
+        // 1️⃣ Roles
         $this->call(RoleSeeder::class);
 
-        // criar usuario admin
-        $user = User::updateOrCreate([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('12345678'),
-        ]);
+        // 2️⃣ Criar ou atualizar usuário admin
+        $user = User::updateOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('12345678'),
+            ]
+        );
 
-        // 3 atribui cargo admin
+
+        // 3️⃣ Atribuir role admin (sem duplicar)
         $adminRole = Role::where('name', 'admin')->first();
 
         if ($adminRole) {
