@@ -5,11 +5,11 @@
 @section('content')
     <div class="login-box">
         <div class="login-logo">
-            <a href="{{ route('login') }}"><b>Admin</b>LTE</a>
+            <a href="{{ route('login') }}"><b>Admin</b>FMG</a>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Entre na sua conta</p>
 
                 @session('status')
                     <div class="alert alert-success" role="alert">
@@ -35,7 +35,7 @@
                             <span class="bi bi-lock-fill"></span>
                         </div>
                         <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                            placeholder="Password" />
+                            placeholder="Senha" />
                         @error('password')
                             <div class="invalid-feedback">
                                 {{ $message }}</div>
@@ -43,17 +43,14 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">Entrar</button>
                     </div>
 
                 </form>
 
                 <div class="mt-2 text-center">
-                    <p class="mb-1">
-                        <a href="{{ route('password.request') }}">I forgot my password</a>
-                    </p>
                     <p class="mb-0">
-                        <a href="{{ route('register') }}" class="text-center"> Register a new membership </a>
+                        <a href="{{ route('register') }}" class="text-center">Cadastre-se</a>
                     </p>
                 </div>
             </div>
