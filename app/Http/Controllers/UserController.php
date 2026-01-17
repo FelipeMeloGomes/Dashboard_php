@@ -73,7 +73,7 @@ class UserController extends Controller
 
     public function updateProfile(User $user, Request $request)
     {
-        Gate::authorize('updateProfile', User::class);
+        Gate::authorize('update', User::class);
 
         $input = $request->validate([
             'type' => 'required',
@@ -87,7 +87,7 @@ class UserController extends Controller
 
     public function updateInterests(User $user, Request $request)
     {
-        Gate::authorize('updateInterests', User::class);
+        Gate::authorize('update', User::class);
 
         $input = $request->validate([
             'interests' => 'nullable|array',
@@ -105,7 +105,7 @@ class UserController extends Controller
 
     public function updateRoles(User $user, Request $request)
     {
-        Gate::authorize('updateRoles', User::class);
+        Gate::authorize('update', User::class);
 
         $input = $request->validate([
             'roles' => 'required|array',
@@ -118,7 +118,7 @@ class UserController extends Controller
 
     public function delete(User $user)
     {
-        Gate::authorize('delete', User::class);
+        Gate::authorize('destroy', User::class);
 
         $user->delete();
 
