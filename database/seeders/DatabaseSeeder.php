@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
 
         // criar usuario admin
-        $user = User::factory()->create([
+        $user = User::updateOrCreate([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
         // 3 atribui cargo admin
         $adminRole = Role::where('name', 'admin')->first();
 
-        $user->roles()->attach($adminRole->id);
+        if ($adminRole) {
+            $user->roles()->syncWithoutDetaching([$adminRole->id]);
+        }
     }
 }
