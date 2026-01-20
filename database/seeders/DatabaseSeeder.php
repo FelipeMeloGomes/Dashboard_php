@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1️⃣ Roles
+        // Roles
         $this->call(RoleSeeder::class);
 
-        // 2️⃣ Criar ou atualizar usuário admin
+        // Create or update user admin
         $user = User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         );
 
 
-        // 3️⃣ Atribuir role admin (sem duplicar)
+        //  role admin
         $adminRole = Role::where('name', 'admin')->first();
 
         if ($adminRole) {

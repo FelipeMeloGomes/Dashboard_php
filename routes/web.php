@@ -9,7 +9,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('home');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users/create', [UserController::class, 'store'])->name('users.store');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::delete('/users/{user}', [UserController::class, 'delete'])->name('users.delete');
 
     // Usuario
     Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
@@ -23,6 +24,4 @@ Route::middleware(['auth'])->group(function () {
 
     // Usuario Cargos
     Route::put('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('users.updateRoles');
-
-    Route::delete('/users/{user}', [UserController::class, 'delete'])->name('users.delete');
 });
