@@ -1,11 +1,14 @@
 @extends('layouts.default')
-@section('page-title', 'Dashboard')
+@section('page-title', 'Home')
 @section('content')
+    @session('status')
+        <div class="alert alert-success">{{ $value }}</div>
+    @endsession
 
     <h2>{{ $greeting }}, {{ auth()->user()->name }}!</h2>
     <div class="row">
         <div class="col-lg-3 col-6">
-            <div class="small-box text-bg-warning">
+            <div class="small-box text-bg-primary">
                 <div class="inner">
                     <h3>{{ $totalUsers }}</h3>
                     <p>Usuários Registrados</p>
@@ -20,7 +23,7 @@
         </div>
         @foreach ($roles as $role)
             <div class="col-lg-3 col-6">
-                <div class="small-box text-bg-warning">
+                <div class="small-box text-bg-primary">
                     <div class="inner">
                         <h3>{{ $role->users_count }}</h3>
                         <p>Usuários {{ ucfirst($role->name) }}</p>

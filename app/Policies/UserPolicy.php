@@ -24,6 +24,11 @@ class UserPolicy
         return $user->roles()->whereIn('name', ['admin', 'editor'])->exists();
     }
 
+    public function updateAvatar(User $user)
+    {
+        return $user->roles()->whereIn('name', ['admin', 'editor', 'user'])->exists();
+    }
+
     public function destroy(User $user)
     {
         return $user->roles()->where('name', 'admin')->exists();

@@ -10,17 +10,34 @@
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="{{ Vite::asset('resources/images/user2-160x160.jpg') }}"
+                    <img src="{{ auth()->user()->avatar
+                        ? asset('storage/' . auth()->user()->avatar)
+                        : Vite::asset('resources/images/avatar.jpg') }}"
                         class="user-image rounded-circle shadow" alt="User Image" />
                     <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                     <li class="user-header text-bg-primary">
-                        <img src="{{ Vite::asset('resources/images/user2-160x160.jpg') }}" class="rounded-circle shadow"
-                            alt="User Image" />
+                        <img src="{{ auth()->user()->avatar
+                            ? asset('storage/' . auth()->user()->avatar)
+                            : Vite::asset('resources/images/avatar.jpg') }}"
+                            class="rounded-circle shadow" alt="User Image" />
                         <p>
                             {{ auth()->user()->name }}
                         </p>
+                    </li>
+                    <li class="px-3 py-2">
+                        <form action="{{ route('users.avatar', auth()->user()) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+
+                            <input type="file" name="avatar" class="form-control form-control-sm mb-2"
+                                accept="image/*" required>
+
+                            <button class="btn btn-primary btn-sm w-100">
+                                Atualizar foto
+                            </button>
+                        </form>
                     </li>
                     <li class="user-footer">
                         <form action="{{ route('logout') }}" method="post">
