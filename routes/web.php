@@ -24,4 +24,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Usuario Cargos
     Route::put('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('users.updateRoles');
+
+    // Dashboard
+    Route::get('/', [UserController::class, 'dashboard'])->name('home');
 });

@@ -27,6 +27,33 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function dashboard()
+    {
+        $totalUsers = User::count();
+        $roles = Role::withCount('users')->get();
+        $greeting = $this->getGreeting();
+
+
+        return view('home', compact('totalUsers', 'roles', 'greeting'));
+    }
+
+
+    /**
+     * Retorna uma saudação baseada no horário atual.
+     */
+    private function getGreeting(): string
+    {
+        $hour = now()->hour;
+
+        if ($hour >= 5 && $hour < 12) {
+            return 'Bom dia';
+        } elseif ($hour >= 12 && $hour < 18) {
+            return 'Boa tarde';
+        } else {
+            return 'Boa noite';
+        }
+    }
+
     public function create()
     {
         return view('users.create');

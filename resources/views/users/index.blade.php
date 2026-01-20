@@ -18,7 +18,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Ação</th>
@@ -33,10 +33,10 @@
 
                     <td>
                         <div class="d-flex gap-2">
-                            @can('edit', \App\Models\User::class)
+                            @can('edit', $user)
                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Editar</a>
                             @endcan
-                            @can('destroy', \App\Models\User::class)
+                            @can('destroy', $user)
                                 <form action="{{ route('users.delete', $user->id) }}" method='POST'>
                                     @csrf
                                     @method('DELETE')
