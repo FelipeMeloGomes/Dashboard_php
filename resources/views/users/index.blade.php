@@ -1,7 +1,9 @@
 @extends('layouts.default')
 @section('page-title', 'Usuários')
 @section('page-actions')
-    <a href="{{ route('users.create') }}" class="btn btn-primary">Adicionar</a>
+    @can('create', App\Models\User::class)
+        <a href="{{ route('users.create') }}" class="btn btn-primary">Adicionar</a>
+    @endcan
 @endsection
 @section('content')
     @session('status')
