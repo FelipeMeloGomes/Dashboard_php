@@ -2,28 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 
 Route::middleware(['auth'])->group(function () {
     // Home
     Route::get('/', [UserController::class, 'dashboard'])->name('home');
 
-    // Usuario
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
-    Route::delete('/users/{user}', [UserController::class, 'delete'])->name('users.delete');
+    // Usuário
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'delete'])->name('delete');
 
-    // Usuario Profile
-    Route::put('/users/{user}/profile', [UserController::class, 'updateProfile'])->name('users.updateProfile');
-
-    // Usuario Avatar
-    Route::post('/users/{user}/avatar', [UserController::class, 'updateAvatar'])->name('users.avatar');
-
-    // Usuario interesses
-    Route::put('/users/{user}/interests', [UserController::class, 'updateInterests'])->name('users.updateInterests');
-
-    // Usuario Cargos
-    Route::put('/users/{user}/roles', [UserController::class, 'updateRoles'])->name('users.updateRoles');
+        // users customizados
+        Route::put('/{user}/profile', [UserProfileController::class, 'updateProfile'])->name('updateProfile');
+        Route::post('/{user}/avatar', [UserProfileController::class, 'updateAvatar'])->name('avatar');
+        Route::put('/{user}/interests', [UserProfileController::class, 'updateInterests'])->name('updateInterests');
+        Route::put('/{user}/roles', [UserProfileController::class, 'updateRoles'])->name('updateRoles');
+    });
 });
