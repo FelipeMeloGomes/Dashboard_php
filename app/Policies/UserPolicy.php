@@ -14,6 +14,11 @@ class UserPolicy
         //
     }
 
+    public function create(User $user)
+    {
+        return $user->roles()->where('name', 'admin')->exists();
+    }
+
     public function edit(User $user)
     {
         return $user->roles()->whereIn('name', ['admin', 'editor'])->exists();

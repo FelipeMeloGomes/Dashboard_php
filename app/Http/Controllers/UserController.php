@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -42,15 +44,9 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $input = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-
-        User::create($input);
+        User::create($request->validated());
 
         return redirect()->route('users.index')->with('status', 'Usuário adicionado com sucesso!');
     }
@@ -65,18 +61,9 @@ class UserController extends Controller
         return view('users.edit', compact('user', 'roles'));
     }
 
-    public function update(User $user, Request $request)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        Gate::authorize('update', User::class);
-
-        $input = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'exclude_if:password,null|min:8',
-        ]);
-
-
-        $user->update($input);
+        $user->update($request->validated());
 
         return redirect()->route('users.index')->with('status', 'Usuário atualizado com sucesso!');
     }
