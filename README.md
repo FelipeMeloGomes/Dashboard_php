@@ -10,41 +10,42 @@ O objetivo principal do projeto foi praticar **desenvolvimento fullstack com Lar
 
 ### Backend
 
--   **PHP 8+**
--   **Laravel**
--   **MySQL**
--   **Eloquent ORM**
--   **Autenticação Laravel (Auth)**
+- **PHP 8+**
+- **Laravel**
+- **MySQL**
+- **Eloquent ORM**
+- **Autenticação Laravel (Auth)**
 
 ### Frontend
 
--   **Blade (Template Engine do Laravel)**
--   **JavaScript**
--   **Vite**
--   **Bootstrap 5**
--   **AdminLTE 4**
--   **Bootstrap Icons**
--   **OverlayScrollbars**
+- **Blade (Template Engine do Laravel)**
+- **JavaScript**
+- **Vite**
+- **Bootstrap 5**
+- **AdminLTE 4**
+- **Bootstrap Icons**
+- **OverlayScrollbars**
 
 ### Infraestrutura / Deploy
 
--   **Railway**
--   **Docker (para build em produção)**
--   **HTTPS com Railway + Laravel**
--   **Node.js (build dos assets)**
--   **NPM**
+- **Railway**
+- **Docker (para build em produção)**
+- **HTTPS com Railway + Laravel**
+- **Node.js (build dos assets)**
+- **NPM**
 
 ---
 
 ## ✨ Funcionalidades
 
--   Sistema de autenticação (login e registro)
--   CRUD de usuários
--   Gerenciamento de perfis, interesses e cargos
--   Dashboard administrativo com layout responsivo
--   Integração entre backend Laravel e frontend via Blade + Vite
--   Build de assets com Vite
--   Deploy automatizado no Railway
+- Sistema de autenticação (login e registro)
+- CRUD de usuários
+- Gerenciamento de perfis, interesses e cargos
+- Upload e gerenciamento de avatars de usuário com integração Cloudinary
+- Dashboard administrativo com layout responsivo
+- Integração entre backend Laravel e frontend via Blade + Vite
+- Build de assets com Vite
+- Deploy automatizado no Railway
 
 ---
 
@@ -52,15 +53,16 @@ O objetivo principal do projeto foi praticar **desenvolvimento fullstack com Lar
 
 Durante o desenvolvimento deste projeto, foram praticados e aprendidos:
 
--   Estrutura e organização de projetos Laravel
--   Uso de **Blade** para criação de layouts reutilizáveis
--   Compilação de assets com **Vite**
--   Integração de bibliotecas frontend (Bootstrap, AdminLTE, Icons)
--   Configuração de ambiente de produção
--   Resolução de problemas de **mixed content (HTTP vs HTTPS)**
--   Deploy de aplicações Laravel no **Railway**
--   Uso de variáveis de ambiente (`.env`)
--   Build e cache de produção (`php artisan optimize`)
+- Estrutura e organização de projetos Laravel
+- Uso de **Blade** para criação de layouts reutilizáveis
+- Upload e manipulação de arquivos (imagens) com **Cloudinary**
+- Compilação de assets com **Vite**
+- Integração de bibliotecas frontend (Bootstrap, AdminLTE, Icons)
+- Configuração de ambiente de produção
+- Resolução de problemas de **mixed content (HTTP vs HTTPS)**
+- Deploy de aplicações Laravel no **Railway**
+- Uso de variáveis de ambiente (`.env`)
+- Build e cache de produção (`php artisan optimize`)
 
 ---
 

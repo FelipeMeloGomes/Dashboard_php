@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -32,28 +32,12 @@ class UserController extends Controller
     {
         $totalUsers = User::count();
         $roles = Role::withCount('users')->get();
-        $greeting = $this->getGreeting();
+        $greeting = greeting();
 
 
         return view('home', compact('totalUsers', 'roles', 'greeting'));
     }
 
-
-    /**
-     * Retorna uma saudação baseada no horário atual.
-     */
-    private function getGreeting(): string
-    {
-        $hour = now()->hour;
-
-        if ($hour >= 5 && $hour < 12) {
-            return 'Bom dia';
-        } elseif ($hour >= 12 && $hour < 18) {
-            return 'Boa tarde';
-        } else {
-            return 'Boa noite';
-        }
-    }
 
     public function create()
     {
@@ -121,14 +105,24 @@ class UserController extends Controller
             'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-            Storage::disk('public')->delete($user->avatar);
+        $cloudinary = CloudinaryService::client();
+
+        // Deleta avatar antigo
+        if ($user->avatar) {
+            $cloudinary->uploadApi()->destroy($user->avatar);
         }
 
-        $path = $request->file('avatar')->store('avatars', 'public');
+        // Upload novo
+        $upload = $cloudinary->uploadApi()->upload(
+            $request->file('avatar')->getRealPath(),
+            [
+                'folder' => 'avatars',
+            ]
+        );
 
+        // Salva APENAS o public_id
         $user->update([
-            'avatar' => $path,
+            'avatar' => $upload['public_id'],
         ]);
 
         return back()->with('status', 'Foto de perfil atualizada com sucesso!');

@@ -10,18 +10,13 @@
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="{{ auth()->user()->avatar
-                        ? asset('storage/' . auth()->user()->avatar)
-                        : Vite::asset('resources/images/avatar.jpg') }}"
-                        class="user-image rounded-circle shadow" alt="User Image" />
+                    <img src="{{ auth()->user()->avatar_url }}" class="user-image rounded-circle shadow"
+                        alt="User Image" />
                     <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                     <li class="user-header text-bg-primary">
-                        <img src="{{ auth()->user()->avatar
-                            ? asset('storage/' . auth()->user()->avatar)
-                            : Vite::asset('resources/images/avatar.jpg') }}"
-                            class="rounded-circle shadow" alt="User Image" />
+                        <img src="{{ auth()->user()->avatar_url }}" class="rounded-circle shadow" alt="User Image" />
                         <p>
                             {{ auth()->user()->name }}
                         </p>
