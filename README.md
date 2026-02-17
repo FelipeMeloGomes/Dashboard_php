@@ -4,6 +4,7 @@ Este projeto é um **Dashboard administrativo** desenvolvido com **PHP (Laravel)
 
 O objetivo principal do projeto foi praticar **desenvolvimento fullstack com Laravel**, integração de front-end com Blade + Vite e realizar o **deploy completo em produção utilizando Railway**.
 
+
 ---
 
 ## 🚀 Tecnologias Utilizadas
