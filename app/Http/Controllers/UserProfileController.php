@@ -3,82 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\UserProfile;
+use App\Http\Requests\UpdateAvatarRequest;
+use App\Http\Requests\UpdateInterestsRequest;
+use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\UpdateRolesRequest;
 use App\Services\CloudinaryService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class UserProfileController extends Controller
+
 {
-    public function updateProfile(User $user, Request $request)
+
+    public function updateProfile(User $user, UpdateProfileRequest $request)
     {
-        Gate::authorize('update', User::class);
 
-        $input = $request->validate([
-            'type' => 'required',
-            'address' => 'nullable',
-        ]);
-
-        UserProfile::updateOrCreate(['user_id' => $user->id], $input);
+        $user->update($request->validated());
 
         return back()->with('status', 'Perfil do Usuário atualizado com sucesso!');
     }
 
-    public function updateAvatar(User $user, Request $request)
+    public function updateAvatar(User $user, UpdateAvatarRequest $request,  CloudinaryService $cloudinary)
     {
-        Gate::authorize('updateAvatar', User::class);
 
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $file = $request->file('avatar');
 
-        $cloudinary = CloudinaryService::client();
-
-        if ($user->avatar) {
-            $cloudinary->uploadApi()->destroy($user->avatar);
-        }
-
-        $upload = $cloudinary->uploadApi()->upload(
-            $request->file('avatar')->getRealPath(),
+        // upload avatar
+        $upload = $cloudinary->upload(
+            $file->getRealPath(),
             ['folder' => 'avatars']
         );
+
+        $oldAvatar = $user->avatar;
 
         $user->update([
             'avatar' => $upload['public_id'],
         ]);
 
+        // delete old avatar
+        if ($oldAvatar) {
+            $cloudinary->destroy($oldAvatar);
+        }
+
         return back()->with('status', 'Foto de perfil atualizada com sucesso!');
     }
 
 
-    public function updateInterests(User $user, Request $request)
+    public function updateInterests(User $user, UpdateInterestsRequest $request)
     {
-        Gate::authorize('update', User::class);
-
-        $input = $request->validate([
-            'interests' => 'nullable|array',
-        ]);
 
         $user->interests()->delete();
 
-        if (!empty($input['interests'])) {
-            $interests = array_map(fn($item) => ['name' => $item], $input['interests']);
-            $user->interests()->createMany($interests);
+        if ($request->filled('interests')) {
+            $user->interests()->createMany(
+                collect($request->validated('interests'))
+                    ->map(fn($item) => ['name' => $item])
+                    ->toArray()
+            );
         }
 
-        return back()->with('status', 'Usuário editado com sucesso!');
+        return back()->with('status', 'Interesses atualizados com sucesso!');
     }
 
-    public function updateRoles(User $user, Request $request)
+    public function updateRoles(User $user, UpdateRolesRequest $request)
     {
-        Gate::authorize('update', User::class);
 
-        $input = $request->validate([
-            'roles' => 'required|array',
-        ]);
-
-        $user->roles()->sync($input['roles']);
+        $user->roles()->sync($request->validated('roles'));
 
         return back()->with('status', 'Usuário editado com sucesso!');
     }
