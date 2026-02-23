@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
+use App\Models\Role;
+use Database\Seeders\RoleSeeder;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -12,7 +17,10 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(RefreshDatabase::class)
+    ->beforeEach(function () {
+        $this->seed(RoleSeeder::class);
+    })
     ->in('Feature');
 
 /*
@@ -44,4 +52,52 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Helper de autenticação
+|--------------------------------------------------------------------------
+|
+| Permite autenticar um usuário rapidamente nos testes.
+| Pode criar automaticamente ou receber um usuário existente.
+|
+*/
+
+function login(?User $user = null): User
+{
+    $user ??= User::factory()->create();
+
+    test()->actingAs($user);
+
+    return $user;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Helper de atribuição de roles
+|--------------------------------------------------------------------------
+|
+| Função auxiliar utilizada nos testes para associar uma role específica
+| a um usuário.
+|
+| Essa função facilita a escrita de testes de autorização, permitindo
+| configurar rapidamente permissões como "admin", "editor" ou "user"
+| antes de executar ações protegidas por policies.
+|
+| Exemplo de uso:
+|
+|   $user = login();
+|   assignRole($user, 'admin');
+|
+| A role informada deve existir no banco de dados (garantido pelo
+| RoleSeeder executado antes de cada teste).
+|
+*/
+
+function assignRole($user, string $roleName)
+{
+    $role = Role::where('name', $roleName)->first();
+    $user->roles()->attach($role);
 }

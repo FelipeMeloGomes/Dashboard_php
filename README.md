@@ -4,9 +4,6 @@ Este projeto é um **Dashboard administrativo** desenvolvido com **PHP (Laravel)
 
 O objetivo principal do projeto foi praticar **desenvolvimento fullstack com Laravel**, integração de front-end com Blade + Vite e realizar o **deploy completo em produção utilizando Railway**.
 
-
----
-
 ## 🚀 Tecnologias Utilizadas
 
 ### Backend
@@ -66,6 +63,11 @@ Durante o desenvolvimento deste projeto, foram praticados e aprendidos:
 - Build e cache de produção (`php artisan optimize`)
 
 ---
+
+## 👤 Usuário de Teste
+
+- **Email:** admin@gmail.com
+- **Senha:** 12345678
 
 ## 🛠️ Como rodar o projeto localmente
 
