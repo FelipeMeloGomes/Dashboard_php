@@ -26,8 +26,15 @@
                             enctype="multipart/form-data">
                             @csrf
 
-                            <input type="file" name="avatar" class="form-control form-control-sm mb-2"
+                            <input type="file" name="avatar"
+                                class="form-control form-control-sm mb-2 @error('avatar') is-invalid @enderror"
                                 accept="image/*" required>
+
+                            @error('avatar')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                             <button class="btn btn-primary btn-sm w-100">
                                 Atualizar foto
