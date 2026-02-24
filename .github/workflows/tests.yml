@@ -38,11 +38,8 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
-      - name: Inject Cloudinary secrets
-        run: |
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> .env
-          echo "CLOUDINARY_KEY=${{ secrets.CLOUDINARY_KEY }}" >> .env
-          echo "CLOUDINARY_SECRET=${{ secrets.CLOUDINARY_SECRET }}" >> .env
+      - name: Inject Cloudinary url
+        run: echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> .env
 
       - name: Generate app key
         run: php artisan key:generate

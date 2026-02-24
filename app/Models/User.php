@@ -66,7 +66,7 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if (!$this->avatar) {
-            return Vite::asset('resources/images/avatar.jpg');
+            return asset('images/avatar.jpg');
         }
 
         return 'https://res.cloudinary.com/dkm4ckppx/image/upload/' . $this->avatar;
