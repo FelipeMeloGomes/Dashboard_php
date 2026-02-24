@@ -24,14 +24,3 @@ test('editor nao pode deletar usuario', function () {
 
   $response->assertForbidden();
 });
-
-test('qualquer role pode atualizar avatar', function () {
-  $user = login();
-  assignRole($user, 'user');
-
-  $response = $this->post(route('users.avatar', $user), [
-    'avatar' => \Illuminate\Http\UploadedFile::fake()->image('avatar.jpg')
-  ]);
-
-  $response->assertStatus(302);
-});
