@@ -12,7 +12,10 @@
 
     <meta name="supported-color-schemes" content="light dark" />
 
-    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+    @unless (app()->environment('testing'))
+        @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+    @endunless
+
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
